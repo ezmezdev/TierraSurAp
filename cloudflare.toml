@@ -1,0 +1,44 @@
+# ============================================================
+# CONFIGURACIÓN DE CLOUDFLARE PAGES
+# ============================================================
+
+[build]
+  command = "npm run build"
+  destination = ".next"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NPM_VERSION = "10"
+
+# ============================================================
+# VARIABLES DE ENTORNO EN CLOUDFLARE
+# Configurar en: Pages > tu-proyecto > Settings > Environment variables
+#
+# PRODUCTION:
+#   NEXT_PUBLIC_SUPABASE_URL        = https://xxx.supabase.co
+#   NEXT_PUBLIC_SUPABASE_ANON_KEY   = eyJ...
+#   NEXT_PUBLIC_MP_PUBLIC_KEY       = APP_USR-xxx
+#   NEXT_PUBLIC_APP_URL             = https://tu-dominio.com
+#
+# SECRETS (marcar como "Encrypted"):
+#   SUPABASE_SERVICE_ROLE_KEY       = eyJ...
+#   MP_ACCESS_TOKEN                 = APP_USR-0000...
+#   MP_WEBHOOK_SECRET               = tu_secret
+# ============================================================
+
+# Headers de seguridad adicionales (Cloudflare Transform Rules)
+# Configurar en: Cloudflare Dashboard > Rules > Transform Rules
+#
+# Regla: Add Security Headers
+# - X-Frame-Options: DENY
+# - X-Content-Type-Options: nosniff
+# - Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+#
+# WAF Custom Rules:
+# - Bloquear IPs que no sean de MercadoPago para /api/webhooks/mercadopago
+#   (IPs de MP: consultar documentación oficial de MP)
+# - Rate limit: 100 req/min por IP para rutas de API
+
+# ============================================================
+# WORKERS (opcional - para rate limiting avanzado)
+# ============================================================
